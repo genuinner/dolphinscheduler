@@ -25,6 +25,7 @@ import static com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.dolphinscheduler.common.constants.DateConstants.YYYY_MM_DD_HH_MM_SS;
 
+import com.fasterxml.jackson.databind.type.MapType;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -264,8 +265,8 @@ public final class JSONUtils {
         }
 
         try {
-            return objectMapper.readValue(json, new TypeReference<Map<K, V>>() {
-            });
+            MapType mapType = objectMapper.getTypeFactory().constructMapType(Map.class, classK, classV);
+            return objectMapper.readValue(json, mapType);
         } catch (Exception e) {
             log.error("json to map exception!", e);
         }
